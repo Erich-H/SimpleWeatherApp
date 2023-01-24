@@ -1,2 +1,6 @@
 #ingnore config file
 config.py
+
+#ignore pycache
+__pycache__/
+*.pyc
