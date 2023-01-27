@@ -1,20 +1,24 @@
-from tkinter import *
+import tkinter as tk
 from tkinter import messagebox
 import requests
 import json
 import config 
 from datetime import datetime
 
-# window_width = 800
-# window_height =600
+
 # # # creating the GUI
-# root = Tk()
-# root.geometry('800x600')
-# root.resizable(0,0)
-# root.title('Simple Weather App')
+root = tk.Tk()
+root.geometry('800x600')
+root.resizable(0,0)
+root.title('Simple Weather App')
 
 
 # city_name = StringVar()
+
+# formats time per location
+def time_format(utc):
+    local_time = datetime.utcfromtimestamp(utc)
+    return local_time.time()
 
 # function for showing the weather
 def getWeather():
@@ -37,21 +41,29 @@ def getWeather():
         weatherDisc = curr_weather['weather'][0]['description']
         pressure = curr_weather['main']['pressure']
         humidity = curr_weather['main']['humidity']
+        timezone = curr_weather['timezone']
+        sunRise =time_format(curr_weather['sys']['sunrise'] + timezone)
+        sunSet = time_format(curr_weather['sys']['sunset'] + timezone)
+        
 
-        weather_now = f'Temperature: {temp}\n Feels like: {feels_like} \n Condition: {condition}'
+        weather_now = f'''Temperature: {temp} F\n Feels like: {feels_like} F \n Condition: {condition}
+        Description: {weatherDisc}
+        Pressure: {pressure}
+        Humidity: {humidity}
+        Sunrise: {sunRise}
+        Sunset: {sunSet}'''
+        print(weather_now)
+    else:
+        weather_now = 'Please try another city name'
         print(weather_now)
 
-
-getWeather()
-
-
-# city_header =Label(root, text='Enter City Name').pack(pady=10)
-# city_input = Entry(root, textvariable=city_name, width=20).pack()
+# test API call
+# getWeather()
 
 
-# btn = Button(root, text='Check Weather', command=getWeather)
-# btn_width = btn.winfo_width()
-# btn_height = btn.winfo_height()
-# btn.place(x= (window_width - btn_width) / 2, y= (window_height - btn_height) / 2)
-# root.mainloop()
-
+city_val = tk.Label(text="Enter a city name ")
+entry = tk.Entry()
+city_val.pack()
+entry.pack()
+#mainloop for window
+root.mainloop()
