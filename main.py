@@ -52,15 +52,13 @@ def getWeather():
         Humidity: {humidity}
         Sunrise: {sunRise}
         Sunset: {sunSet}'''
-        return weather_now
+        output.insert(INSERT, weather_now)
     else:
         weather_now = 'Please try another city name'
-        print(weather_now)
-
         output.insert(INSERT, weather_now)
 
 
-city_header = tk.Label(root, text="Enter a city name").pack(pady=10)
+header = tk.Label(root, text="Enter a city name").pack(pady=10)
 city_input = tk.Entry(root, textvariable= city_val).pack()
 
 btn = tk.Button(root, command=getWeather, text="Get Forecast").pack(pady=20)
