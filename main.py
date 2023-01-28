@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import INSERT, StringVar
 import requests
 import json
 import config 
@@ -13,7 +13,7 @@ root.resizable(0,0)
 root.title('Simple Weather App')
 
 
-# city_name = StringVar()
+city_val = StringVar()
 
 # formats time per location
 def time_format(utc):
@@ -23,14 +23,14 @@ def time_format(utc):
 # function for showing the weather
 def getWeather():
 
-    city_name = input('Enter City Name ')
+    city_name = city_val.get()
     weather_url = 'https://api.openweathermap.org/data/2.5/weather?q='+ city_name +'&appid=' + config.api_key + '&units=imperial'
     print(weather_url)
   
     response = requests.get(weather_url)
     curr_weather = response.json()
 
-    # tfield.delete("1.0", 'end')
+    output.delete("1.0", "end")
 
 
     if curr_weather['cod'] == 200:
@@ -52,18 +52,22 @@ def getWeather():
         Humidity: {humidity}
         Sunrise: {sunRise}
         Sunset: {sunSet}'''
-        print(weather_now)
+        return weather_now
     else:
         weather_now = 'Please try another city name'
         print(weather_now)
 
-# test API call
-# getWeather()
+        output.insert(INSERT, weather_now)
 
 
-city_val = tk.Label(text="Enter a city name ")
-entry = tk.Entry()
-city_val.pack()
-entry.pack()
+city_header = tk.Label(root, text="Enter a city name").pack(pady=10)
+city_input = tk.Entry(root, textvariable= city_val).pack()
+
+btn = tk.Button(root, command=getWeather, text="Get Forecast").pack(pady=20)
+
+weather = tk.Label(root, text="The Current Weather is: ").pack(pady=10)
+
+output = tk.Text(root, width=46, height=10)
+output.pack()
 #mainloop for window
 root.mainloop()
